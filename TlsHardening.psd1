@@ -6,7 +6,7 @@
     CompanyName       = ''
     Description       = 'Enables TLS 1.2 for Schannel, sets .NET strong crypto defaults, and optionally enables cipher suites.'
 
-    PowerShellVersion = '7.5.4'
+	PowerShellVersion = '5.1'
 
     FunctionsToExport = @('Set-TlsHardening')
     CmdletsToExport   = @()
