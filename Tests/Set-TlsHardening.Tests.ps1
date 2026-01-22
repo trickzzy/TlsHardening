@@ -22,7 +22,7 @@ Describe "Set-TlsHardening" {
         { Set-TlsHardening -WhatIf } | Should -Not -Throw
     }
 
-    It "invokes helper calls for TLS 1.2 + .NET settings" {
+    It "invokes helper calls for TLS 1.2 + .NET settings (even in -WhatIf)" {
         Set-TlsHardening -WhatIf
 
         Should -Invoke -ModuleName TlsHardening New-RegistryKey -Times 2
@@ -34,10 +34,12 @@ Describe "Set-TlsHardening" {
         Should -Invoke -ModuleName TlsHardening Write-Warning -Times 1
     }
 
-    It "attempts to enable cipher suites when cmdlet is available" {
+    It "attempts to enable cipher suites when cmdlet is available (not using -WhatIf)" {
         Mock -ModuleName TlsHardening Get-Command { return @{ Name = 'Enable-TlsCipherSuite' } }
 
-        Set-TlsHardening -WhatIf
-        Should -Invoke -ModuleName TlsHardening Enable-TlsCipherSuite -TimesGreaterOrEqual 1
+        # No -WhatIf so ShouldProcess() is true by default; Enable-TlsCipherSuite is mocked, so it's safe.
+        Set-TlsHardening -Confirm:$false
+
+        Should -Invoke -ModuleName TlsHardening Enable-TlsCipherSuite -Times 1
     }
 }
