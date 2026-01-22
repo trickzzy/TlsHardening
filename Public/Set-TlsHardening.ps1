@@ -35,8 +35,8 @@ function Set-TlsHardening {
     $tls12Server = Join-Path $SChannelRegPath "TLS 1.2\Server"
     $tls12Client = Join-Path $SChannelRegPath "TLS 1.2\Client"
 
-    Ensure-RegistryKey -Path $tls12Server
-    Ensure-RegistryKey -Path $tls12Client
+    New-RegistryKey -Path $tls12Server
+    New-RegistryKey -Path $tls12Client
 
     Set-DwordValue -Path $tls12Server -Name Enabled -Value 1
     Set-DwordValue -Path $tls12Server -Name DisabledByDefault -Value 0
@@ -73,5 +73,5 @@ function Set-TlsHardening {
         }
     }
 
-    Write-Host "TLS hardening registry changes applied. A reboot is recommended for Schannel changes to fully apply."
+    Write-Verbose "TLS hardening registry changes applied. A reboot is recommended for Schannel changes to fully apply."
 }
