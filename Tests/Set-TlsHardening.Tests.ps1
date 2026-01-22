@@ -15,13 +15,19 @@ Describe "TlsHardening Module" {
         { Set-TlsHardening -WhatIf } | Should -Not -Throw
     }
 
-    It "emits a warning when Enable-TlsCipherSuite is not available" {
+    It "handles cipher suite cmdlet availability appropriately" {
+        $hasCmdlet = $null -ne (Get-Command Enable-TlsCipherSuite -ErrorAction SilentlyContinue)
+
         $warnings = & {
             $WarningPreference = 'Continue'
             Set-TlsHardening -WhatIf
         } 3>&1
 
-        # At least one warning record should be present
-        $warnings | Should -Not -BeNullOrEmpty
+        if ($hasCmdlet) {
+            $warnings | Should -BeNullOrEmpty
+        }
+        else {
+            $warnings | Should -Not -BeNullOrEmpty
+        }
     }
 }
