@@ -1,4 +1,4 @@
-function Ensure-RegistryKey {
+function New-RegistryKey {
     [CmdletBinding(SupportsShouldProcess = $true)]
     param([Parameter(Mandatory)][string]$Path)
 
